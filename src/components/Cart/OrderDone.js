@@ -1,6 +1,6 @@
 import Modal from "../UI/Modal";
 
-const OrderDone=({onClose})=>{
+const OrderDone=({onClose,status})=>{
 
     return(
         <Modal onClose={onClose}>
@@ -8,7 +8,7 @@ const OrderDone=({onClose})=>{
                 <div className={"order-container--success"}>
                     <img src="" alt="Success" className="img-fluid"/>
                     <div className="message">
-                        <h1>Order Success!</h1>
+                        <h1>{status}</h1>
                         <span>Order ID:#{Math.random().toString()}</span>
                     </div>
                 </div>

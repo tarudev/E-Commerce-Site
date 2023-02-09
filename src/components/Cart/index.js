@@ -4,13 +4,14 @@ import CartItem from "./CartItem"
 import OrderDone from "./OrderDone"
 import { useSelector } from "react-redux"
 import { useDispatch } from "react-redux"
-import { addItemHandler,removeItemHandler } from "../../actions"
+import { addItemHandler,removeItemHandler,placeOrder } from "../../actions"
 
 const Cart = () => {
     const [showModal, setShowModal] = useState(false)
-    const items=useSelector(state=>state.items)
+    const items=useSelector(state=>state.cart.items)
     const dispatch=useDispatch()
-    const totalAmount=useSelector(state=>state.totalAmount)
+    const totalAmount=useSelector(state=>state.cart.totalAmount)
+    const [OrderId,setOrderId]=useState("")
 
     const handleModal = () => {
         setShowModal(previousState => !previousState)
@@ -21,9 +22,17 @@ const Cart = () => {
     const handleOrderModal = () => {
         setShowModal(false)
         setOrderShowModal(previousState => !previousState)
-        dispatch({
-            type:"CLEAR_CART"
-        })
+    }
+
+    const orderHandler=()=>{
+        dispatch(placeOrder(response=>{
+            if(!response.error){
+                setShowModal(false)
+                setOrderShowModal(previousState => !previousState)
+            }else{
+                alert(response.data.error || "Some Error")
+            }
+        }))
     }
 
     const dispatchHandle=(type,item)=>{
@@ -54,17 +63,21 @@ const Cart = () => {
                         <h2>Checkout Modal</h2>
                         <div className="checkout-modal_list">
                             {
-                                items.length > 0 ?
+                                items.length > 0 ?                                
                                 items.map(item => {
                                     return (
+                                        <>
                                         <CartItem 
                                             data={item} 
                                             onEmitIncreaseItem={id => dispatchHandle(1,item)} 
                                             onEmitDecreaseItem={id => dispatchHandle(-1,item)} 
                                             key={item.id}
                                         />
+                                        {/* {<div className="empty-cart">{status}</div>} */}
+                                        </>
                                     )
                                 })
+                                
                                 :
                                 <div className="empty-cart">Please add something in your cart!</div>
                             }
@@ -79,16 +92,16 @@ const Cart = () => {
                                         <span style={{marginLeft: "4px"}}>INR</span>
                                     </h4>
                                 </div>
-                                <button onClick={handleOrderModal}>Order Now</button>
-                                
+                                {<button onClick={orderHandler}>Order Now</button>}
                             </div>
                         }
                     </div>
                 </Modal>
             }
             {
-                showOrderModal && <OrderDone onClose={handleOrderModal}></OrderDone>
+                showOrderModal && <OrderDone onClose={handleOrderModal} status={"Order Success"}></OrderDone>
             }
+          
         </Fragment>
     )
 }

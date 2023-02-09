@@ -1,8 +1,15 @@
 import Products from "./components/Products/Products";
 import Header from "./components/Layout/Header"
 import Subheader from "./components/Layout/Subheader";
+import { Route,Routes } from "react-router-dom";
+import NotFound from "./components/NotFound";
+import AuthIndex from "./components/Auth";
+import { useDispatch,useSelector } from "react-redux";
+import { useEffect } from "react";
+import { checkLogin } from "./actions/auth";
 
 const App = () => {
+
   // const [cartItems, setCartItems] = useState([])
   // const [eventQueue, setEventQueue] = useState({
   //   id: "",
@@ -44,11 +51,29 @@ const App = () => {
   //   })
   // }
 
+  const dispatch=useDispatch();
+  const authState=useSelector(state=>state.auth)
+
+  useEffect(()=>{
+    dispatch(checkLogin(()=>{}))
+  },[])
+
   return (
     <div>
       <Header />
       <Subheader/>
-      <Products />
+      <Routes>
+        { 
+          !authState.idToken && 
+          <>
+            <Route exact path={"/login"} element={<AuthIndex/>}/>
+            <Route exact path={"/signup"} element={<AuthIndex/>}/>
+          </>
+        }
+        <Route exact path={"/:category?"} element={<Products/>}/>
+        <Route exact path={"/404"} element={<NotFound/>}/>
+      </Routes>
+        
     </div>
   );
 }

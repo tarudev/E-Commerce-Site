@@ -1,11 +1,24 @@
 import Cart from "../Cart"
+import SearchBox from "../UI/SearchBox"
+import { useNavigate } from "react-router-dom"
+import { useSelector,useDispatch } from "react-redux"
+import { logOut } from "../../actions/auth"
 
-const Header = ({ count, items, onHandleEvent }) => {
+const Header = () => {
+    const navigate=useNavigate()
+    const authState=useSelector(state=>state.auth)
+
+    const dispatch=useDispatch()
+
+    const logoutHandler=()=>{
+        dispatch(logOut());
+    }
+
     return (
         <header>
             <div className="nav-brand">
-                <a to="/">
-                    <span>AmaKart</span>
+                <a href="/">
+                    <span>LaxKart</span>
                     <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-shopping-cart" width="30"
                         height="30" viewBox="0 0 24 24" strokeWidth="1.5" stroke="white" fill="none" strokeLinecap="round"
                         strokeLinejoin="round">
@@ -18,29 +31,16 @@ const Header = ({ count, items, onHandleEvent }) => {
                 </a>
             </div>
             <div className="searchBox-container">
-                <form>
-                    <input name="search" type="text"
-                        id="search" placeholder="Enter product name, category" />
-                    <button type="submit">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-search" width="20"
-                            height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="white" fill="none"
-                            strokeLinecap="round" strokeLinejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <circle cx="10" cy="10" r="7" />
-                            <line x1="21" y1="21" x2="15" y2="15" />
-                        </svg>
-                    </button>
-                </form>
-                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-search" width="20"
-                    height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="white" fill="none" strokeLinecap="round"
-                    strokeLinejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <circle cx="10" cy="10" r="7" />
-                    <line x1="21" y1="21" x2="15" y2="15" />
-                </svg>
+                <SearchBox/>
             </div>
+            {   
+                authState && authState.idToken ?
+                <button className="login-btn" onClick={logoutHandler}>Log Out</button>
+                :
+                <button className="login-btn" onClick={()=>{navigate("/login")}}>Login</button>
+            }
             <div className="cart-container">
-                <Cart count={count} items={items} onHandleEvent={onHandleEvent}/>
+                <Cart/>
             </div>
         </header >
     )
