@@ -11,7 +11,7 @@ const Cart = () => {
     const items=useSelector(state=>state.cart.items)
     const dispatch=useDispatch()
     const totalAmount=useSelector(state=>state.cart.totalAmount)
-    const [OrderId,setOrderId]=useState("")
+    // const [OrderId,setOrderId]=useState("")
 
     const handleModal = () => {
         setShowModal(previousState => !previousState)
