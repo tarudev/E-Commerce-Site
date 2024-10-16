@@ -1,4 +1,4 @@
-# E-Commerce Site
+# LaxKart E-Commerce Site
 
 <li>This project is an effort to showcase various tools entailed by <b>React, JavaScript, HTML, Google Firebase and CSS (SCSS)</b> to produce a single page design E-commerce site.</li>
 <li>The project involves curated implementation of componentization to enable reusability of various elements like counters, modals, toggles, items, etc.</li>
